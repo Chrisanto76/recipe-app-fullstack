@@ -4,13 +4,14 @@
   "description": "react-fullstack-app",
   "main": "./src/index.ts",
   "scripts": {
-   "start": "npx nodemon ./src/index.ts"
+    "start": "npx nodemon ./src/index.ts"
   },
   "author": "antony poure",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "prisma": "^5.4.2"
   },
