@@ -49,7 +49,23 @@ app.get('/api/recipes/favourite', async (req, res) => {
 		return res.json(favourites);
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ error: 'Something went wrong' });
+		return res.status(500).json({ error: 'Oh no! Something went wrong' });
+	}
+});
+
+app.delete('/api/recipes/favourite', async (req, res) => {
+	const recipeId = req.body.recipeId;
+
+	try {
+		await prismaClient.favouriteRecipes.delete({
+			where: {
+				recipeId: recipeId,
+			},
+		});
+		return res.status(204).send();
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ error: 'Damn! Something went wrong' });
 	}
 });
 
