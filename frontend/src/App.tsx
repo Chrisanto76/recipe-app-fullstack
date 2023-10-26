@@ -5,12 +5,15 @@ import './App.css';
 import { RecipeCard } from './components/recipeCard';
 import RecipeModal from './components/RecipeModal';
 
+type Tabs = 'search' | 'favourites';
+
 const App = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('');
 	const [recipes, setRecipes] = useState<Recipe[]>([]);
 	const [selectedRecipe, setSelectedRecipe] = useState<Recipe | undefined>(
 		undefined
 	);
+	const [selectedTab, setSelectedTab] = useState<Tabs>('search');
 	const pageNumber = useRef(1);
 
 	const handleSearchSubmit = async (event: FormEvent) => {
@@ -35,23 +38,36 @@ const App = () => {
 	};
 	return (
 		<div>
-			<form onSubmit={(event) => handleSearchSubmit(event)}>
-				<input
-					type="text"
-					required
-					placeholder="Search for a recipe"
-					value={searchTerm}
-					onChange={(event) => setSearchTerm(event.target.value)}
-				></input>
-				<button type="submit">Submit</button>
-			</form>
-			{recipes.map((recipe) => (
-				<RecipeCard recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
-			))}
+			<div className="tabs">
+				<h1 onClick={() => setSelectedTab('search')}> Recipe Search </h1>
+				<h1 onClick={() => setSelectedTab('favourites')}> Favourites </h1>
+			</div>
+			{selectedTab === 'search' && (
+				<>
+					<form onSubmit={(event) => handleSearchSubmit(event)}>
+						<input
+							type="text"
+							required
+							placeholder="Search for a recipe"
+							value={searchTerm}
+							onChange={(event) => setSearchTerm(event.target.value)}
+						></input>
+						<button type="submit">Submit</button>
+					</form>
+					{recipes.map((recipe) => (
+						<RecipeCard
+							recipe={recipe}
+							onClick={() => setSelectedRecipe(recipe)}
+						/>
+					))}
 
-			<button className="view-more-button" onClick={handleViewMoreClick}>
-				View More
-			</button>
+					<button className="view-more-button" onClick={handleViewMoreClick}>
+						View More
+					</button>
+				</>
+			)}
+
+			{selectedTab === 'favourites' && <div> This is the Favourites tab </div>}
 
 			{selectedRecipe ? (
 				<RecipeModal
