@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useRef } from 'react';
+import React, { FormEvent, useState, useRef, useEffect } from 'react';
 import * as api from './api';
 import { Recipe } from './types';
 import './App.css';
@@ -14,7 +14,21 @@ const App = () => {
 		undefined
 	);
 	const [selectedTab, setSelectedTab] = useState<Tabs>('search');
+	const [favouriteRecipes, setFavouriteRecipes] = useState<Recipe[]>([]);
 	const pageNumber = useRef(1);
+
+	useEffect(() => {
+		const fetchFavouriteRecipes = async () => {
+			try {
+				const favouriteRecipes = await api.getFavouriteRecipes();
+				setFavouriteRecipes(favouriteRecipes.results);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		fetchFavouriteRecipes();
+	}, []);
 
 	const handleSearchSubmit = async (event: FormEvent) => {
 		event.preventDefault();
@@ -67,7 +81,16 @@ const App = () => {
 				</>
 			)}
 
-			{selectedTab === 'favourites' && <div> This is the Favourites tab </div>}
+			{selectedTab === 'favourites' && (
+				<div>
+					{favouriteRecipes.map((recipe) => (
+						<RecipeCard
+							recipe={recipe}
+							onClick={() => setSelectedRecipe(recipe)}
+						/>
+					))}
+				</div>
+			)}
 
 			{selectedRecipe ? (
 				<RecipeModal

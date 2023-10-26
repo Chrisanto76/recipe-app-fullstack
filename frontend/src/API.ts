@@ -18,3 +18,14 @@ export const getRecipeSummary = async (recipeId: string) => {
 	}
 	return response.json();
 };
+
+export const getFavouriteRecipes = async () => {
+	const url = new URL('http://localhost:5550/api/recipes/favourite');
+	const response = await fetch(url);
+
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+
+	return response.json();
+};
